@@ -1,15 +1,21 @@
+import { todosFeature } from "./todos.feature";
+
 const {todosReducer} = todosFeature;
 
-const mockTodos = [
-  {id: 1, title: 'Test', isCompleted: false},
-  {id: 2, title: 'Test 2', isCompleted: true},
-  {id: 3, title: 'Test 3', isCompleted: false},
-];
+const mockStore = {
+  todos: [
+    {id: 1, title: 'Test', isCompleted: false},
+    {id: 2, title: 'Test 2', isCompleted: true},
+    {id: 3, title: 'Test 3', isCompleted: false},
+  ]
+};
+
+const mockTodos = mockStore.todos;
 
 describe('TodosFeature', () => {
 
   it('should return correct initial state', () => {
-    expect(todosReducer(undefined, {})).toEqual({todos: []});
+    expect(todosReducer(undefined, {type: ''})).toEqual({todos: []});
   });
 
   it('should add todo to state on createTodo action', () => {
@@ -21,7 +27,7 @@ describe('TodosFeature', () => {
     const todoIdToDelete = mockTodos[0].id;
     const action = {type: 'deleteTodo', payload: todoIdToDelete};
     const updateTodos = mockTodos.filter((todo) => todo.id !== todoIdToDelete);
-    expect(todosReducer(mockTodos, action)).toEqual({todos: updateTodos});
+    expect(todosReducer(mockStore, action)).toEqual({todos: updateTodos});
   });
 
   it('should toggle todo isCompleted on toggleMarkAsCompleteTodo action', () => {
@@ -33,6 +39,6 @@ describe('TodosFeature', () => {
       }
       return todo;
     });
-    expect(todosReducer(mockTodos, action)).toEqual({todos: updatedTodos});
+    expect(todosReducer(mockStore, action)).toEqual({todos: updatedTodos});
   });
 });
